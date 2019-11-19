@@ -4,7 +4,7 @@
 # Setup the project
 #
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(coll)
+project(FirstStage)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -41,8 +41,8 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 and ROOT libraries
 #
-add_executable(coll coll.cc ${sources} ${headers})
-target_link_libraries(coll ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
+add_executable(FirstStage FirstStage.cc ${sources} ${headers})
+target_link_libraries(FirstStage ${Geant4_LIBRARIES} ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -64,5 +64,5 @@ endforeach()
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
-install(TARGETS coll DESTINATION bin)
+install(TARGETS FirstStage DESTINATION bin)
 

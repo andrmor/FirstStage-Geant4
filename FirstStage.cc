@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     SM.bGuiMode = false;
 
     SM.numProtonsPerRun = 310;
-    SM.numRuns = 10;// 1.0e8 / SM.numProtonsPerRun;
+    SM.numRuns = 100;// 1.0e8 / SM.numProtonsPerRun;
     SM.bunchPeriod = 10.0;
 
     SM.ProtonEnergy = 130.0; //200.0;
@@ -25,7 +25,7 @@ int main(int argc, char** argv)
     SM.CylShift = 0.0; //0 -> 7.5
     long Seed = 111111;
 
-    SM.FileName_Output = "/home/andr/tmp/OUTPUT1.txt"; //format: name E t X Y Z Vx Vy Vz
+    SM.FileName_Output = "/home/andr/tmp/OUTPUT2.txt"; //format: name E t X Y Z Vx Vy Vz
 
     CLHEP::RanecuEngine* randGen = new CLHEP::RanecuEngine();
     randGen->setSeed(Seed);
