@@ -16,7 +16,7 @@ int main(int argc, char** argv)
     SM.bGuiMode = false;
 
     SM.numProtonsPerRun = 310;
-    SM.numRuns = 100;// 1.0e8 / SM.numProtonsPerRun;
+    SM.numRuns = 1000;// 1.0e8 / SM.numProtonsPerRun;
     SM.bunchPeriod = 10.0;
 
     SM.ProtonEnergy = 130.0; //200.0;
