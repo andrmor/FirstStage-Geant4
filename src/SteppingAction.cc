@@ -22,9 +22,12 @@ void SteppingAction::UserSteppingAction(const G4Step *step)
         const G4ThreeVector & pos = postP->GetPosition();
         const G4ThreeVector & dir = postP->GetMomentumDirection();
 
+        double time = step->GetPostStepPoint()->GetGlobalTime()/ns;
+        if (time > SM.TimeLimit) return;
+
         ss << step->GetTrack()->GetParticleDefinition()->GetParticleName() << ' ';
         ss << postP->GetKineticEnergy()/keV << ' ';
-        ss << step->GetPostStepPoint()->GetGlobalTime()/ns << ' ';
+        ss << time << ' ';
         ss << pos[0]/mm << ' ' << pos[1]/mm << ' ' << pos[2]/mm << ' ';
         ss << dir[0] << ' ' << dir[1] << ' ' << dir[2];
 
