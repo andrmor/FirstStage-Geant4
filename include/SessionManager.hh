@@ -40,7 +40,9 @@ class SessionManager
         // run time variables
         double bunchTime        = 0;
 
-        double TimeLimit        = 1.0e9;
+        double TimeLimit        = 0;
+        int    OutputPrecision  = 6;
+
 
 public:
         void sendLineToDepoOutput(const std::stringstream & text);

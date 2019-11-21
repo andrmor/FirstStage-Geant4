@@ -16,18 +16,19 @@ int main(int argc, char** argv)
     SM.bGuiMode = false;
 
     SM.numProtonsPerRun = 310;
-    SM.numRuns = 1000; //1.0e8 / SM.numProtonsPerRun;
+    SM.numRuns = 1.0e8 / SM.numProtonsPerRun;
     SM.bunchPeriod = 10.0;
 
     SM.ProtonEnergy = 130.0; //200.0;
     SM.PMMAlength = 200.0; //400.0;
 
     SM.CylShift = 0.0; //0 -> 7.5
-    long Seed = 222222;
+    long Seed = 111111;
 
-    SM.TimeLimit = 1.0e9; // ignore all particles appearing 1+ second after the start of irradiation
+    SM.TimeLimit = 3.13e6; // ignore all particles appearing 0.00313+ ms after the start of irradiation
+    SM.OutputPrecision = 8;
 
-    SM.FileName_Output = "/home/andr/tmp/Target-0-222222.txt"; //format: name E t X Y Z Vx Vy Vz
+    SM.FileName_Output = "/home/andr/tmp/2stages/Target-1e8-0-111111.txt"; //format: name E t X Y Z Vx Vy Vz
 
     CLHEP::RanecuEngine* randGen = new CLHEP::RanecuEngine();
     randGen->setSeed(Seed);

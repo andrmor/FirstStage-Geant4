@@ -18,12 +18,14 @@ void SteppingAction::UserSteppingAction(const G4Step *step)
 
     if (postP->GetMaterial() == SM.dummyMat)
     {
+        const double time = postP->GetGlobalTime()/ns;
+        if (time > SM.TimeLimit) return;
+
         std::stringstream ss;
+        ss.precision(SM.OutputPrecision);
+
         const G4ThreeVector & pos = postP->GetPosition();
         const G4ThreeVector & dir = postP->GetMomentumDirection();
-
-        double time = step->GetPostStepPoint()->GetGlobalTime()/ns;
-        if (time > SM.TimeLimit) return;
 
         ss << step->GetTrack()->GetParticleDefinition()->GetParticleName() << ' ';
         ss << postP->GetKineticEnergy()/keV << ' ';
