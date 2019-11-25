@@ -27,7 +27,7 @@ class SessionManager
         bool bGuiMode           = false;
 
         std::string FileName_Output;
-        bool bBinaryFile        = false;
+        bool bBinaryOutput        = false;
 
         double PMMAlength       = 0;
         G4Material * dummyMat   = nullptr;

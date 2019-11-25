@@ -25,7 +25,7 @@ void SessionManager::startSession()
 {
     outStream = new std::ofstream();
 
-    if (bBinaryFile) outStream->open(FileName_Output, std::ios::out | std::ios::binary);
+    if (bBinaryOutput) outStream->open(FileName_Output, std::ios::out | std::ios::binary);
     else             outStream->open(FileName_Output);
 
     if (!outStream->is_open())
@@ -38,7 +38,6 @@ void SessionManager::startSession()
 void SessionManager::endSession()
 {
     outStream->close();
-    std::cout <<  "Data saved to file:" << std::endl << FileName_Output << std::endl;
 }
 
 void SessionManager::runSimulation()
@@ -58,7 +57,7 @@ void SessionManager::runSimulation()
 
 void SessionManager::saveEventNumber(int iEvent)
 {
-    if (bBinaryFile)
+    if (bBinaryOutput)
     {
         *outStream << char(0xee);
         outStream->write((char*)&iEvent, sizeof(int));
@@ -74,7 +73,7 @@ void SessionManager::saveEventNumber(int iEvent)
 
 void SessionManager::saveParticle(const G4String & particle, double energy, double time, double * PosDir)
 {
-    if (bBinaryFile)
+    if (bBinaryOutput)
     {
         *outStream << char(0xff);
         outStream->write((char*)&energy, sizeof(double));
