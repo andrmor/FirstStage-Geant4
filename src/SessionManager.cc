@@ -65,9 +65,10 @@ void SessionManager::saveEventNumber(int iEvent)
     }
     else
     {
-        std::stringstream ss;
-        ss << '#' << iEvent;
-        *outStream << ss.rdbuf() << std::endl;
+        *outStream << '#' << iEvent << std::endl;
+        //std::stringstream ss;
+        //ss << '#' << iEvent;
+        //*outStream << ss.rdbuf() << std::endl;
     }
 }
 

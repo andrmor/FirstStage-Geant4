@@ -11,42 +11,54 @@
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//
+// File formats
+//   Input
+//     for ascii files
+//       new event line: #EventNumber
+//       new record:     Particle Energy[keV] Time[ns] X[mm] Y[mm] Z[mm] DirX DirY DirZ
+//     for binary files
+//       new event line: 0xEE(char) EventNumber(int)
+//       new record:     0xFF(char) Energy(double)[keV] Time(double)[ns] X(double)[mm] Y(double)[mm] Z(double)[mm] DirX(double)[mm] DirY(double)[mm] DirZ(double)[mm] ParticleName(string) 0x00(char)
+//
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 int main(int argc, char** argv)
 {
     SessionManager& SM = SessionManager::getInstance();
 
-    SM.bGuiMode = false;
+    // --- User init ---
+
+    SM.bGuiMode         = false; // if true, G4 visualization will start. use beamOn to generate particles
 
     SM.numProtonsPerRun = 310;
-    SM.numRuns = 10;//1.0e8 / SM.numProtonsPerRun;
-    SM.bunchPeriod = 10.0;
+    SM.numRuns          = 1000;//1.0e8 / SM.numProtonsPerRun;
+    SM.bunchPeriod      = 10.0;
 
-    SM.ProtonEnergy = 130.0; //200.0;
-    SM.PMMAlength = 200.0; //400.0;
+    SM.ProtonEnergy     = 130.0; //200.0;
+    SM.PMMAlength       = 200.0; //400.0;
 
-    SM.CylShift = 0.0; //0 -> 7.5
-    long Seed = 111111;
+    SM.CylShift         = 0.0; //0 -> 7.5
 
-    SM.TimeLimit = 3.13e6; // ignore all particles appearing 0.00313+ ms after the start of irradiation
-    SM.OutputPrecision = 8;
+    long Seed           = 111111;
 
-    std::stringstream baseName;
+    SM.TimeLimit        = 3.13e6; // ignore all particles appearing 0.00313+ ms after the start of irradiation
 
-    SM.bBinaryFile = true;
-    baseName << "/home/andr/tmp/2stages/test";
+    SM.bBinaryFile      = true;
 
-    baseName << "_seed";
-    baseName << Seed;
-    baseName << "_shift";
-    baseName << SM.CylShift;
-    baseName << "_runs";
-    baseName << SM.numRuns;
-    if (SM.bBinaryFile)
-        baseName << ".bin";
-    else
-        baseName << ".txt";
+    std::string WorkingDirectory = "/home/andr/tmp/2stages";
+    std::string BaseFileName     = "Series1";                   // extension is added automatically: .txt or .bin
 
-    SM.FileName_Output = baseName.str();
+    SM.OutputPrecision  = 8; // have no effect if bBinaryFile = true
+
+    // --- end of user init ---
+
+    std::stringstream baseNameStream;
+    baseNameStream << WorkingDirectory << '/' << BaseFileName << "_seed" << Seed << "_shift" << SM.CylShift << "_runs" << SM.numRuns;
+    if (SM.bBinaryFile)  baseNameStream << ".bin";
+    else                 baseNameStream << ".txt";
+    SM.FileName_Output = baseNameStream.str();
     std::cout <<  "Saving data to file: " << SM.FileName_Output << std::endl;
 
     CLHEP::RanecuEngine* randGen = new CLHEP::RanecuEngine();
