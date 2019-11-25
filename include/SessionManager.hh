@@ -4,6 +4,7 @@
 #include <string>
 
 class G4Material;
+class G4String;
 
 class SessionManager
 {
@@ -26,6 +27,7 @@ class SessionManager
         bool bGuiMode           = false;
 
         std::string FileName_Output;
+        bool bBinaryFile        = false;
 
         double PMMAlength       = 0;
         G4Material * dummyMat   = nullptr;
@@ -45,11 +47,11 @@ class SessionManager
 
 
 public:
-        void sendLineToDepoOutput(const std::stringstream & text);
+        void saveParticle(const G4String & particle, double energy, double time, double *PosDir);
         void saveEventNumber(int iEvent);
 
 private:
-        std::ofstream * outStreamDeposition = nullptr;
+        std::ofstream * outStream = nullptr;
 };
 
 #endif // SESSIONMANAGER_H

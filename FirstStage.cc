@@ -2,6 +2,8 @@
 #include "DetectorConstruction.hh"
 #include "ActionInitialization.hh"
 
+#include <sstream>
+
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "QGSP_BIC_HP.hh"
@@ -16,7 +18,7 @@ int main(int argc, char** argv)
     SM.bGuiMode = false;
 
     SM.numProtonsPerRun = 310;
-    SM.numRuns = 1.0e8 / SM.numProtonsPerRun;
+    SM.numRuns = 10;//1.0e8 / SM.numProtonsPerRun;
     SM.bunchPeriod = 10.0;
 
     SM.ProtonEnergy = 130.0; //200.0;
@@ -28,7 +30,24 @@ int main(int argc, char** argv)
     SM.TimeLimit = 3.13e6; // ignore all particles appearing 0.00313+ ms after the start of irradiation
     SM.OutputPrecision = 8;
 
-    SM.FileName_Output = "/home/andr/tmp/2stages/Target-1e8-0-111111.txt"; //format: name E t X Y Z Vx Vy Vz
+    std::stringstream baseName;
+
+    SM.bBinaryFile = true;
+    baseName << "/home/andr/tmp/2stages/test";
+
+    baseName << "_seed";
+    baseName << Seed;
+    baseName << "_shift";
+    baseName << SM.CylShift;
+    baseName << "_runs";
+    baseName << SM.numRuns;
+    if (SM.bBinaryFile)
+        baseName << ".bin";
+    else
+        baseName << ".txt";
+
+    SM.FileName_Output = baseName.str();
+    std::cout <<  "Saving data to file: " << SM.FileName_Output << std::endl;
 
     CLHEP::RanecuEngine* randGen = new CLHEP::RanecuEngine();
     randGen->setSeed(Seed);

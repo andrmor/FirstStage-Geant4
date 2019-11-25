@@ -7,9 +7,6 @@
 #include "G4ThreeVector.hh"
 #include "G4SystemOfUnits.hh"
 
-#include <iostream>
-#include <sstream>
-
 void SteppingAction::UserSteppingAction(const G4Step *step)
 {
     SessionManager & SM = SessionManager::getInstance();
@@ -21,18 +18,19 @@ void SteppingAction::UserSteppingAction(const G4Step *step)
         const double time = postP->GetGlobalTime()/ns;
         if (time > SM.TimeLimit) return;
 
-        std::stringstream ss;
-        ss.precision(SM.OutputPrecision);
-
+        double buf[6];
         const G4ThreeVector & pos = postP->GetPosition();
+        buf[0] = pos[0]/mm;
+        buf[1] = pos[1]/mm;
+        buf[2] = pos[2]/mm;
         const G4ThreeVector & dir = postP->GetMomentumDirection();
+        buf[3] = dir[0];
+        buf[4] = dir[1];
+        buf[5] = dir[2];
 
-        ss << step->GetTrack()->GetParticleDefinition()->GetParticleName() << ' ';
-        ss << postP->GetKineticEnergy()/keV << ' ';
-        ss << time << ' ';
-        ss << pos[0]/mm << ' ' << pos[1]/mm << ' ' << pos[2]/mm << ' ';
-        ss << dir[0] << ' ' << dir[1] << ' ' << dir[2];
-
-        SM.sendLineToDepoOutput(ss);
+        SM.saveParticle(step->GetTrack()->GetParticleDefinition()->GetParticleName(),
+                        postP->GetKineticEnergy()/keV,
+                        time,
+                        buf);
     }
 }
