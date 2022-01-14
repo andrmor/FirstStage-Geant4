@@ -26,7 +26,7 @@ void SessionManager::startSession()
     outStream = new std::ofstream();
 
     if (bBinaryOutput) outStream->open(FileName_Output, std::ios::out | std::ios::binary);
-    else             outStream->open(FileName_Output);
+    else               outStream->open(FileName_Output);
 
     if (!outStream->is_open())
     {
@@ -64,34 +64,39 @@ void SessionManager::saveEventNumber(int iEvent)
     }
     else
     {
-        *outStream << '#' << iEvent << std::endl;
+        *outStream << '#' << iEvent << '\n';
         //std::stringstream ss;
         //ss << '#' << iEvent;
         //*outStream << ss.rdbuf() << std::endl;
     }
 }
 
+
 void SessionManager::saveParticle(const G4String & particle, double energy, double time, double * PosDir)
 {
     if (bBinaryOutput)
     {
+        // 0xFF(char) ParticleName(string) 0x00(char) Energy(double)[keV] X(double)[mm] Y(double)[mm] Z(double)[mm] DirX(double) DirY(double) DirZ(double) Time(double)[ns]
+
         *outStream << char(0xff);
-        outStream->write((char*)&energy, sizeof(double));
-        outStream->write((char*)&time, sizeof(double));
-        outStream->write((char*)PosDir, 6*sizeof(double));
         *outStream << particle << char(0x00);
+        outStream->write((char*)&energy, sizeof(double));
+        outStream->write((char*)PosDir, 6*sizeof(double));
+        outStream->write((char*)&time, sizeof(double));
     }
     else
     {
+        // ParticleName Energy[keV] X[mm] Y[mm] Z[mm] DirX DirY DirZ Time[ns]
+
         std::stringstream ss;
         ss.precision(OutputPrecision);
 
         ss << particle << ' ';
         ss << energy << ' ';
-        ss << time << ' ';
         ss << PosDir[0] << ' ' << PosDir[1] << ' ' << PosDir[2] << ' ';     //position
-        ss << PosDir[3] << ' ' << PosDir[4] << ' ' << PosDir[5];            //direction
+        ss << PosDir[3] << ' ' << PosDir[4] << ' ' << PosDir[5] << ' ';     //direction
+        ss << time;
 
-        *outStream << ss.rdbuf() << std::endl;
+        *outStream << ss.rdbuf() << '\n';
     }
 }

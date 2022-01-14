@@ -13,15 +13,16 @@
 
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 //
-// File formats
-//   Input
-//     for ascii files
-//       new event line: #EventNumber
-//       new record:     ParticleName Energy[keV] Time[ns] X[mm] Y[mm] Z[mm] DirX DirY DirZ
-//     for binary files
-//       new event line: 0xEE(char) EventNumber(int)
-//       new record:     0xFF(char) Energy(double)[keV] Time(double)[ns] X(double)[mm] Y(double)[mm] Z(double)[mm] DirX(double)[mm] DirY(double)[mm] DirZ(double)[mm] ParticleName(string) 0x00(char)
+// Output file format
 //
+//   Binary:
+//       new event line: 0xEE(char) EventNumber(int)
+//       new record:     0xFF(char) ParticleName(string) 0x00(char) Energy(double)[keV] X(double)[mm] Y(double)[mm] Z(double)[mm] DirX(double) DirY(double) DirZ(double) Time(double)[ns]
+//   Ascii:
+//       new event:      #EventNumber
+//       new record:     ParticleName Energy[keV] X[mm] Y[mm] Z[mm] DirX DirY DirZ Time[ns]
+//
+//   DirXYZ is given by a unit vector
 // ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 int main(int argc, char** argv)
@@ -47,7 +48,7 @@ int main(int argc, char** argv)
 
     SM.bBinaryOutput    = true;
 
-    std::string WorkingDirectory = "/home/andr/tmp/2stages";
+    std::string WorkingDirectory = "/home/andr/tmp/test";
     std::string BaseFileName     = "Series1";                   // extension is added automatically: .txt or .bin
 
     SM.OutputPrecision  = 8; // have no effect if bBinaryFile = true
@@ -65,7 +66,7 @@ int main(int argc, char** argv)
     randGen->setSeed(Seed);
     G4Random::setTheEngine(randGen);
 
-    G4UIExecutive* ui =  0;
+    G4UIExecutive * ui  = nullptr;
     if (SM.bGuiMode) ui = new G4UIExecutive(argc, argv);
 
     G4RunManager* runManager = new G4RunManager;
